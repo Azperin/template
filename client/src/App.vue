@@ -12,6 +12,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import pako from 'pako';
 export default {
 	computed: { ...mapState(['ws','wsReadyState']) },
 	methods: { ...mapActions(['WEBSOCKET_SEND_MESSAGE','WEBSOCKET_CHANGE_READYSTATE'])},
@@ -21,7 +22,14 @@ export default {
 		this.ws.onerror = this.WEBSOCKET_CHANGE_READYSTATE;
 		this.ws.onmessage = (msg) => {
 			if (!msg.isTrusted) return;
-			console.log(msg.data);
+			msg.data.arrayBuffer().then(msgData => {
+				try {
+					msgData = JSON.parse(pako.ungzip(msgData, { to: 'string' }));
+				} catch(e) { return; };
+				
+				if (!this.$store._mutations[msgData.a]) return;
+				this.$store.commit(msgData.a, msgData);
+			});
 		};
 	},
 }

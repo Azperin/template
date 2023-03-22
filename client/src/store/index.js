@@ -6,14 +6,17 @@ export default createStore({
 		wsReadyState: 3,
 	},
 	getters: {},
-	mutations: {},
+	mutations: {
+		echotest: (state, e) => {
+			console.log(e);
+		},
+	},
 	actions: {
 		WEBSOCKET_SEND_MESSAGE({ state }, msg) {
 			try {
-				state.ws.send(msg);
-			} catch(e) {
-
-			}
+				msg = JSON.stringify(msg);
+			} catch(e) { return; }
+			state.ws.send(msg);
 		},
 		WEBSOCKET_CHANGE_READYSTATE({state}) {
 			state.wsReadyState = state.ws.readyState;
