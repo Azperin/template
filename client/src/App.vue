@@ -1,26 +1,29 @@
 <template>
 	<div class="wrapper">
 		<nav>
+			State: {{ wsReadyState }}
 			<router-link to="/">Home</router-link> |
 			<router-link to="/about">About</router-link>
 		</nav>
+		
 		<router-view></router-view>
 	</div>
 </template>
 
 <script>
-
+import { mapState, mapActions } from 'vuex';
 export default {
-	created() {
-		var ws = new WebSocket('ws://localhost:3541');
-		ws.onopen = () => {
-			console.log('connected')
+	computed: { ...mapState(['ws','wsReadyState']) },
+	methods: { ...mapActions(['WEBSOCKET_SEND_MESSAGE','WEBSOCKET_CHANGE_READYSTATE'])},
+	mounted() {
+		this.ws.onopen = this.WEBSOCKET_CHANGE_READYSTATE;
+		this.ws.onclose = this.WEBSOCKET_CHANGE_READYSTATE;
+		this.ws.onerror = this.WEBSOCKET_CHANGE_READYSTATE;
+		this.ws.onmessage = (msg) => {
+			if (!msg.isTrusted) return;
+			console.log(msg.data);
 		};
-		ws.onclose = () => {};
-		ws.onerror = (e) => '';
-		ws.onmessage = (m) => console.log;
 	},
-
 }
 </script>
 
