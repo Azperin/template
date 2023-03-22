@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build && node ./gzip_build.js"
   },
   "dependencies": {
     "vue": "^3.2.13",
