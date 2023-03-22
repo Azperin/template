@@ -2,9 +2,7 @@ const WebSocket = require('ws');
 const WSS = new WebSocket.Server({ port: 3541 });
 const SOCKET_MAX_REQUEST_PER_SECONDS = 10;
 const SOCKET_ROUTER = require('./action_routes/index.js');
-const GLOBAL_STATE = {};
-
-console.log(SOCKET_ROUTER);
+const GLOBAL_STATE = require('./state/index.js');
 
 WSS.on('connection', function(ws) { // second arg is http connectionRequest that can be use for gather cookies if needed
 	console.log('------ GOT CONNECTION');
