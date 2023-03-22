@@ -11,8 +11,8 @@ WSS.on('connection', function(ws) { // second arg is http connectionRequest that
 	ws.lastRequestAt = Date.now();
 	ws.spamRequestsCounter = 0;
 
-	ws.on('close', () => '').on('error', (err) => {}).on('message', (m) => {
-		if (!m) return;
+	ws.on('close', () => '').on('error', (err) => {}).on('message', (message) => {
+		if (!message) return;
 		const currentTime = Date.now();
 		ws.spamRequestsCounter = (currentTime - ws.lastRequestAt) > 1000 ? 0 : (ws.spamRequestsCounter + 1);
 		if (ws.spamRequestsCounter > SOCKET_MAX_REQUEST_PER_SECONDS) return;
@@ -21,13 +21,12 @@ WSS.on('connection', function(ws) { // second arg is http connectionRequest that
 		// socket only accept message as JSON with property 'a' as action
 		let request;
 		try { 
-			request = JSON.parse(r); 
+			request = JSON.parse(message); 
 		} catch { return; };
 		let requestAction = request?.a;
 		if (!SOCKET_ROUTER.hasOwnProperty(requestAction)) return;
 
-		// call loaded action with current socket, array of all sockets, request itself and state
-		SOCKET_ROUTER[requestAction](ws, WSS, request, GLOBAL_STATE); 
+		SOCKET_ROUTER[requestAction](ws, WSS, request, GLOBAL_STATE); // call loaded action if exists
 
 	});
 });
