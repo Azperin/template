@@ -6,7 +6,7 @@ module.exports = {
 
 	/**
 	 * Generate a token mainly for auth purpose
-	 * @param {number} [len] - integer as string, typeof '123456' === 'string'
+	 * @param {number} [len] - token length
 	 * @returns {string}
 	 */
 	generateToken: (len = 160) => {
@@ -19,7 +19,7 @@ module.exports = {
 
 	/**
 	 * Infinite (almost?) increment for generating next ID for users or something like that
-	 * @param {string} str - integer as string, typeof '123456' === 'string'
+	 * @param {string} str - integer as string
 	 * @returns {string}
 	 */
 	generateNextId: (str) => {
