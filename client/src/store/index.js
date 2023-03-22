@@ -9,7 +9,11 @@ export default createStore({
 	mutations: {},
 	actions: {
 		WEBSOCKET_SEND_MESSAGE({ state }, msg) {
-			state.ws.send(msg);
+			try {
+				state.ws.send(msg);
+			} catch(e) {
+
+			}
 		},
 		WEBSOCKET_CHANGE_READYSTATE({state}) {
 			state.wsReadyState = state.ws.readyState;
