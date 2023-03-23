@@ -2,8 +2,7 @@ const zlib = require('zlib');
 const SYMBOLS = 'abcdefghijklmnopqrstuvwxyz_.!?$-ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789'.split('');
 const SYBOLS_LENGTH = SYMBOLS.length;
 
-module.exports = {
-
+const Utils = {
 	/**
 	 * Generate a token mainly for auth purpose
 	 * @param {number} [len] - token length
@@ -56,7 +55,8 @@ module.exports = {
 	compressMsg: (message, level = 7) => {
 		try {
 			return zlib.gzipSync(JSON.stringify(message), { level: level });
-			// return Array.from(zlib.gzipSync(JSON.stringify(message), { level: level })).reduce((x,v) => x += String.fromCharCode(v), '');
 		} catch(e) { return ''; };
 	},
 };
+
+module.exports = Utils;
