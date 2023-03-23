@@ -1,2 +1,4 @@
+const APP = require('./app/index.js');
 const WSS = require('./websocket/index.js');
-const APP = {};
+
+console.log(APP.getUser('4'));
