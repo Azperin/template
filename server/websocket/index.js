@@ -8,7 +8,7 @@ WSS.on('connection', function(ws) { // second arg is http connectionRequest that
 	ws.lastRequestAt = Date.now();
 	ws.spamRequestsCounter = 0;
 
-	ws.on('close', () => '').on('error', (err) => {}).on('message', (message) => {
+	ws.on('close', () => '').on('error', (err) => '').on('message', (message) => {
 		if (!message) return;
 		const currentTime = Date.now();
 		ws.spamRequestsCounter = (currentTime - ws.lastRequestAt) > 1000 ? 0 : (ws.spamRequestsCounter + 1);
