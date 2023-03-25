@@ -1,4 +1,6 @@
 const DB = require('../db/index.js');
+const UTILS = require('../utils/index.js');
+
 const APP = {
 
 	/**
@@ -6,11 +8,12 @@ const APP = {
 	 * @param {string} uid - user ID
 	 * @returns {proxy}
 	 */
-	getUser: function(uid) {
+	getUser: function(uid = '') {
+		uid = `${uid}`;
+		if (!UTILS.isUidValid(uid)) return 'z';
 		if (!this.cachedUsers.has(uid)) {
-			this.cachedUsers.set(uid, DB.prepare(`SELECT * FROM users WHERE user_id = ? LIMIT 1`).get(uid));
+			this.cachedUsers.set(uid, DB.prepare(`SELECT * FROM users WHERE id = '${uid}' LIMIT 1`).get());
 		};
-		// search in database
 		
 		return this.cachedUsers.get(uid);
 	},

@@ -1,8 +1,19 @@
 const zlib = require('zlib');
 const SYMBOLS = 'abcdefghijklmnopqrstuvwxyz_.!?$-ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789'.split('');
 const SYBOLS_LENGTH = SYMBOLS.length;
+const UID_REGEX = new RegExp("^[0-9]+$");
 
 const Utils = {
+
+	/**
+	 * Validate uid
+	 * @param {string} [len] - uid
+	 * @returns {boolean}
+	 */
+	isUidValid: (uid) => {
+		return UID_REGEX.test(uid);
+	},
+
 	/**
 	 * Generate a token mainly for auth purpose
 	 * @param {number} [len] - token length
