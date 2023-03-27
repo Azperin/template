@@ -1,30 +1,71 @@
 const zlib = require('zlib');
 const SYMBOLS = 'abcdefghijklmnopqrstuvwxyz_.!?$-ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789'.split('');
 const SYBOLS_LENGTH = SYMBOLS.length;
+const DEFAULT_TOKEN_LENGTH = 160;
 const UID_REGEX = new RegExp("^[0-9]+$");
+const EMAIL_REGEX = new RegExp("^[0-9]+$");
 
 const Utils = {
+	WEBSOCKET_DEFAULT_SEND_OPTIONS: { isBinary: true, compress: false },
+	WEBSOCKET_SEND_PINCODE_MESSAGE: null,
+	WEBSOCKET_FAILED_AUTH_MESSAGE: null,
 
 	/**
-	 * Validate uid
+	 * Validate user id
 	 * @param {string} [len] - uid
 	 * @returns {boolean}
 	 */
-	isUidValid: (uid) => {
-		return UID_REGEX.test(uid);
+	isUidValid: (user_id) => {
+		return typeof user_id === 'string' && UID_REGEX.test(user_id);
+	},
+
+	/**
+	 * Validate auth token with default length
+	 * @param {string} token
+	 * @returns {boolean}
+	 */
+	isTokenValid: (token) => {
+		if (typeof token !== 'string') return;
+		if (token.length !== DEFAULT_TOKEN_LENGTH) return;
+		return token.split.every(v => SYMBOLS.includes(v));
+	},
+
+	/**
+	 * Validate given email with regex
+	 * @param {string} [email]
+	 * @returns {boolean}
+	 */
+	isEmailValid: (email) => {
+		return EMAIL_REGEX.test(email);
 	},
 
 	/**
 	 * Generate a token mainly for auth purpose
-	 * @param {number} [len] - token length
+	 * @todo add handle for wrong argument types. If length is incorrect, should use default length or throw an error ?
+	 * @param {number} [token_length] default length is 160 
 	 * @returns {string}
 	 */
-	generateToken: (len = 160) => {
+	generateToken: (token_length = DEFAULT_TOKEN_LENGTH) => {
 		let token = '';
-		while(len--) {
+		while(token_length--) {
 			token += SYMBOLS[Math.floor(Math.random() * SYBOLS_LENGTH)];
 		};
 		return token;
+	},
+
+	/**
+	 * Generate a pincode for email to send
+	 * @returns {string}
+	 */
+	generatePincode: () => {
+		let pin = '';
+		let i = 6; // magic ?
+
+		while(i--) {
+			pin = `${ pin }${ Math.floor(Math.random() * 10) }`;
+		};
+
+		return pin;
 	},
 
 	/**
@@ -59,7 +100,7 @@ const Utils = {
 
 	/**
 	 * Stringify and compress JSON message with zlib library
-	 * @param {JSON} message - JSON message to compress
+	 * @param {object} message - JSON message to compress
 	 * @param {number} [level] - Compression level from 0 to 9
 	 * @returns {buffer}
 	 */
@@ -69,5 +110,8 @@ const Utils = {
 		} catch(e) { return ''; };
 	},
 };
+
+Utils.WEBSOCKET_FAILED_AUTH_MESSAGE = Utils.compressMsg({ a: 'auth', success: false }, 9);
+Utils.WEBSOCKET_SEND_PINCODE_MESSAGE = Utils.compressMsg({ a: 'autrequestEmailPincodeh', success: false }, 9);
 
 module.exports = Utils;

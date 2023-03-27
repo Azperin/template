@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build && node ./gzip_build.js"
+    "build": "vue-cli-service build && node ./gzip_build.js",
+	"deploy": "scp -r [path_to_dist_folder]/* root@[host]:/var/www/client/"
   },
   "dependencies": {
     "pako": "^2.1.0",
