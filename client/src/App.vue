@@ -1,6 +1,6 @@
 <template>
 	<div class="wrapper">
-		<h3>Websocket Ready State: {{ wsReadyState }}</h3>
+		<h3>Websocket Ready State: {{ wsReadyState }}, Timediff: {{ timeDiff }}ms, UID: {{ uid }}</h3>
 		<nav>
 			<router-link to="/">Home</router-link> |
 			<router-link to="/about">About</router-link>
@@ -14,10 +14,19 @@
 import { mapState, mapActions } from 'vuex';
 import pako from 'pako';
 export default {
-	computed: { ...mapState(['ws','wsReadyState']) },
+	computed: { ...mapState(['ws','wsReadyState','timeDiff', 'uid']) },
 	methods: { ...mapActions(['WEBSOCKET_SEND_MESSAGE','WEBSOCKET_CHANGE_READYSTATE'])},
 	mounted() {
-		this.ws.onopen = this.WEBSOCKET_CHANGE_READYSTATE;
+		this.ws.onopen = () => {
+			// init app
+			this.WEBSOCKET_SEND_MESSAGE({ a: 'init', cts: Date.now() });
+			let uid = localStorage.getItem('uid');
+			if (uid) {
+				let token = localStorage.getItem('token');
+				this.WEBSOCKET_SEND_MESSAGE({ a: 'auth', uid: uid, token: token });
+			};
+			this.WEBSOCKET_CHANGE_READYSTATE();
+		};
 		this.ws.onclose = this.WEBSOCKET_CHANGE_READYSTATE;
 		this.ws.onerror = this.WEBSOCKET_CHANGE_READYSTATE;
 		this.ws.onmessage = (msg) => {

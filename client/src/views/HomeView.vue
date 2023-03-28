@@ -1,19 +1,23 @@
 <template>
 	<div>
-		<HelloWorld />
+		<br><br>
+		<Auth />
+		<br><br>
 		<EchoTest />
 	</div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
+import Auth from '@/components/Auth.vue';
 import EchoTest from '@/components/EchoTest.vue';
+
+
 
 export default {
 	name: 'HomeView',
 	components: {
-		HelloWorld,
+		Auth,
 		EchoTest
 	}
 };

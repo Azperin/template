@@ -3,7 +3,7 @@ const SYMBOLS = 'abcdefghijklmnopqrstuvwxyz_.!?$-ABCDEFGHIJKLMNOPQRSTUVWXYZ12345
 const SYBOLS_LENGTH = SYMBOLS.length;
 const DEFAULT_TOKEN_LENGTH = 160;
 const UID_REGEX = new RegExp("^[0-9]+$");
-const EMAIL_REGEX = new RegExp("^[0-9]+$");
+const EMAIL_REGEX = new RegExp("^[a-zA-Z0-9]{1,30}@[a-zA-Z0-9]{1,30}\.[a-zA-Z]{1,10}$");
 
 const Utils = {
 	WEBSOCKET_DEFAULT_SEND_OPTIONS: { isBinary: true, compress: false },
@@ -27,7 +27,7 @@ const Utils = {
 	isTokenValid: (token) => {
 		if (typeof token !== 'string') return;
 		if (token.length !== DEFAULT_TOKEN_LENGTH) return;
-		return token.split.every(v => SYMBOLS.includes(v));
+		return true;
 	},
 
 	/**

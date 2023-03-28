@@ -1,8 +1,15 @@
 <template>
 	<div>
+	<div>
 		<input type="text" :value="msg"/><br>
-		<button @click="WEBSOCKET_SEND_MESSAGE({ a:'exampleEcho', echo: msg })">SEND</button>
+		<button @click="WEBSOCKET_SEND_MESSAGE({ a:'requestEmailPincode', email:'somemail@gmail.com' })">SEND EMAIL REQUEST</button>
 	</div>
+
+	<div>
+		<input type="text" value="0"/><br>
+		<button @click="WEBSOCKET_SEND_MESSAGE({ a:'emailAuth', email:'somemail@gmail.com', pin: '567123' })">SEND</button>
+	</div>
+</div>
 </template>
 
 <script>

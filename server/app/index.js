@@ -2,23 +2,24 @@ const DB = require('../db/index.js');
 const Utils = require('../utils/index.js');
 const CACHED_AUTH_MESSAGE_PROPERTY_NAME = 'cachedAuthMessage';
 const USER_PROXY_HANDLER = {
-	get: function(obj, prop, receiver) {
+	get: function(obj, prop) {
 		if (prop === CACHED_AUTH_MESSAGE_PROPERTY_NAME) {
-			obj[CACHED_AUTH_MESSAGE_PROPERTY_NAME] = Utils.compressMsg({
+			obj[prop] = Utils.compressMsg({
 				a: 'auth',
 				success: true,
-				uid: obj.uid,
-				token: obj.token,
-				// email: obj.email ??? 
+				uid: obj.user_id,
+				token: obj.user_token,
+				email: obj.user_email,
 			}, 9);
 		};
 		return obj[prop];
 	},
 	set: function(obj, prop, value) {
 		obj[prop] = value;
-		if (prop !== CACHED_AUTH_MESSAGE_PROPERTY_NAME && obj[CACHED_AUTH_MESSAGE_PROPERTY_NAME]) {
+		if (prop !== 'lastAccess' && obj[CACHED_AUTH_MESSAGE_PROPERTY_NAME]) {
 			obj[CACHED_AUTH_MESSAGE_PROPERTY_NAME] = null;
 		};
+
 		return true;
 	},
 };
@@ -46,10 +47,11 @@ const APP = {
 		if (!this.CACHE.users.has(uid)) {
 			let user = DB.prepare(`SELECT user_id, user_email, user_token, user_balance FROM users WHERE user_id = '${uid}' LIMIT 1`).get(); // is that garbage collectable ?
 			if (!user) return;
-
+			
 			this.CACHE.users.set(uid, new Proxy( structuredClone(user), USER_PROXY_HANDLER)); 
 		};
 		
+		this.CACHE.users.get(uid).lastAccess = Date.now();
 		return this.CACHE.users.get(uid);
 	},
 
@@ -60,7 +62,7 @@ const APP = {
 	 * @returns {string} user id 
 	 */
 	createUser: function(email) {
-		let uid = DB.prepare(`SELECT user_id FROM users WHERE user_email = '${ email }' LIMIT 1`).run();
+		let uid = DB.prepare(`SELECT user_id FROM users WHERE user_email = '${ email }' LIMIT 1`).get()?.user_id;
 		if (uid) return uid; // if that email already exists just return id for that user
 
 		uid = Utils.generateNextId(this.CACHE.latestUsedIds.get('user'));
@@ -83,8 +85,9 @@ const APP = {
 			return;
 		} else {
 			ws.uid = uid;
-			let msg = this.CACHE.users.get(uid).cachedAuthMessage;
+			let msg = this.getUser(uid).cachedAuthMessage;
 			ws.send(msg, Utils.WEBSOCKET_DEFAULT_SEND_OPTIONS);
+			return;
 		};
 	},
 
@@ -96,12 +99,15 @@ const APP = {
 		let sendedEmail = this.CACHE.emailPincodes.get(email);
 		let currentDate = Date.now();
 
-		if (sendedEmail && sendedEmail.validUntil < currentDate) return;
+		if (sendedEmail) {
+			console.log('have one');
+			return;
+		};
 
 		let pin = Utils.generatePincode()
 		this.CACHE.emailPincodes.set(email, {
 			pin: pin,
-			validUntil: currentDate + 300000, // 5 * 60 * 1000 = 300 000 = 5 минут
+			createdAt: currentDate, // 5 * 60 * 1000 = 300 000 = 5 минут
 		});
 		console.log(`Send pincode ${pin} to email ${email}`);
 
