@@ -16,7 +16,7 @@ import pako from 'pako';
 export default {
 	computed: { ...mapState(['ws','wsReadyState','timeDiff', 'uid']) },
 	methods: { ...mapActions(['WEBSOCKET_SEND_MESSAGE','WEBSOCKET_CHANGE_READYSTATE'])},
-	mounted() {
+	created() {
 		this.ws.onopen = () => {
 			// init app
 			this.WEBSOCKET_SEND_MESSAGE({ a: 'init', cts: Date.now() });
