@@ -3,7 +3,6 @@
 		<br><br>
 		<Auth />
 		<br><br>
-		<EchoTest />
 	</div>
 </template>
 
