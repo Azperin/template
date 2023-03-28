@@ -112,6 +112,6 @@ const Utils = {
 };
 
 Utils.WEBSOCKET_FAILED_AUTH_MESSAGE = Utils.compressMsg({ a: 'auth', success: false }, 9);
-Utils.WEBSOCKET_SEND_PINCODE_MESSAGE = Utils.compressMsg({ a: 'autrequestEmailPincodeh', success: false }, 9);
+Utils.WEBSOCKET_SEND_PINCODE_MESSAGE = Utils.compressMsg({ a: 'authRequestEmailPincode' }, 9);
 
 module.exports = Utils;

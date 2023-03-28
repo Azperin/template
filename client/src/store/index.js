@@ -26,6 +26,7 @@ export default createStore({
 			state.token = success ? token: '';
 			state.email = success ? email: '';
 		},
+		authRequestEmailPincode: () => {}, // triggers on requested PIN code
 	},
 	actions: {
 		WEBSOCKET_SEND_MESSAGE({ state }, msg) {
