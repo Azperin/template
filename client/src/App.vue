@@ -3,7 +3,7 @@
 		<h3>Websocket Ready State: {{ wsReadyState }}, Timediff: {{ timeDiff }}ms, UID: {{ uid }}</h3>
 		<nav>
 			<router-link to="/">Home</router-link> |
-			<router-link to="/about">About</router-link>
+			<router-link to="/profile">Profile</router-link>
 		</nav>
 		
 		<router-view></router-view>

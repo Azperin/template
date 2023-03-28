@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
-import ChatView from '../views/ChatView.vue';
+import ProfileView from '../views/ProfileView.vue';
 
 const routes = [
 	{
@@ -9,9 +9,9 @@ const routes = [
 		component: HomeView
 	},
 	{ 
-		path: '/chat/:id',
-		name: 'chat',
-		component: ChatView 
+		path: '/profile',
+		name: 'profile',
+		component: ProfileView 
 	},
 ];
 
