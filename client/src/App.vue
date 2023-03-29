@@ -1,16 +1,19 @@
 <template>
-	<div class="wrapper">
-		<h3>Websocket Ready State: {{ wsReadyState }}, Timediff: {{ timeDiff }}ms, UID: {{ uid }}</h3>
-		<nav>
-			<router-link to="/">Home</router-link> |
-			<router-link to="/profile">Profile</router-link>
-		</nav>
-		
-		<router-view></router-view>
-	</div>
+	<NConfigProvider>
+		<div class="wrapper">
+			<div class="nav">
+				<h2>Websocket Ready State: {{ wsReadyState }}, Timediff: {{ timeDiff }}ms, UID: {{ uid }}</h2>
+				<router-link to="/">Home</router-link> |
+				<router-link to="/profile">Profile</router-link>
+			</div>
+			<router-view class="router-view"></router-view>
+		</div>
+	</NConfigProvider>
+
 </template>
 
 <script>
+import { NConfigProvider } from 'naive-ui';
 import { mapState, mapActions } from 'vuex';
 import pako from 'pako';
 export default {
@@ -44,4 +47,6 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+</style>
