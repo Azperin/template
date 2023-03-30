@@ -1,24 +1,43 @@
 <template>
-	<NConfigProvider>
-		<div class="wrapper">
-			<div class="nav">
-				<h2>Websocket Ready State: {{ wsReadyState }}, Timediff: {{ timeDiff }}ms, UID: {{ uid }}</h2>
-				<router-link to="/">Home</router-link> |
-				<router-link to="/profile">Profile</router-link>
-			</div>
-			<router-view class="router-view"></router-view>
-		</div>
+	<NConfigProvider :theme="currentTheme">
+		<n-layout position="absolute">
+			<n-layout-header style="height: 52px; padding: 0px 10px ;" bordered>
+				<div class="nav">
+					<h2 @click="toggleTheme">Websocket Ready State: {{ wsReadyState }}, Timediff: {{ timeDiff }}ms, UID: {{ uid }}</h2>
+					<router-link to="/">Home</router-link> |
+					<router-link to="/profile">Profile</router-link>
+				</div>
+			</n-layout-header>
+			<n-layout position="absolute" style="top: 52px; bottom: 0px;">
+				<n-layout-content>
+					<router-view style="padding: 10px;"></router-view>
+				</n-layout-content>
+			</n-layout>
+		</n-layout>	
 	</NConfigProvider>
-
 </template>
 
 <script>
-import { NConfigProvider } from 'naive-ui';
+import { NConfigProvider, NLayout, NLayoutHeader, NLayoutContent, darkTheme, lightTheme } from 'naive-ui';
 import { mapState, mapActions } from 'vuex';
 import pako from 'pako';
 export default {
+	components: {
+		NConfigProvider, NLayout, NLayoutHeader,NLayoutContent
+	},
+	data() {
+		return {
+			currentTheme: lightTheme,
+			darkTheme,
+			lightTheme
+		}
+	},
 	computed: { ...mapState(['ws','wsReadyState','timeDiff', 'uid']) },
-	methods: { ...mapActions(['WEBSOCKET_SEND_MESSAGE','WEBSOCKET_CHANGE_READYSTATE'])},
+	methods: { ...mapActions(['WEBSOCKET_SEND_MESSAGE','WEBSOCKET_CHANGE_READYSTATE']),
+	toggleTheme() {
+		this.currentTheme = (this.currentTheme === this.darkTheme) ? this.lightTheme : this.darkTheme;	
+	},
+},
 	created() {
 		this.ws.onopen = () => {
 			// init app
