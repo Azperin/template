@@ -7,11 +7,14 @@ if (!DB.prepare(`SELECT user_id FROM latest_used_ids LIMIT 1;`).get()) {
 	DB.prepare(`INSERT INTO latest_used_ids (user_id) VALUES ('0');`).run();
 };
 
-// DB.prepare(`INSERT INTO latest_used_ids (user_id) VALUES ('0');`).run();
 
-// [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map(x => `${x}`).forEach(x => {
-// 	DB.prepare(`INSERT INTO users (user_id, user_email, user_token, user_balance) VALUES ('${x}', 'mail${x}@gmail.com' ,'${UTILS.generateToken()}', 0);`).run();
-// 	DB.prepare(`UPDATE latest_used_ids SET user_id = '${x}';`).run();
-// });
+
 
 module.exports = DB;
+
+/* example mock users
+	[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map(x => `${x}`).forEach(x => {
+		DB.prepare(`INSERT INTO users (user_id, user_email, user_token, user_balance) VALUES ('${x}', 'mail${x}@gmail.com' ,'${UTILS.generateToken()}', 0);`).run();
+		DB.prepare(`UPDATE latest_used_ids SET user_id = '${x}';`).run();
+	});
+*/

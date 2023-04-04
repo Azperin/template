@@ -1,10 +1,6 @@
 <template>
-	
-
-	 <n-grid x-gap="12" y-gap="12" cols="s:1 m:2 l:3 xl:5 2xl:4" item-responsive responsive="screen" class="raaa">
-		<n-gi span="s:2 m:3 l:4 xl:5 2xl:6">
-			a
-		</n-gi>
+	<n-grid x-gap="12" y-gap="12" cols="s:1 m:2 l:3 xl:5 2xl:4" item-responsive responsive="screen" class="example-class">
+		<n-gi span="s:2 m:3 l:4 xl:5 2xl:6"></n-gi>
 		<n-gi >
 			<n-switch size="small" />
 			<n-switch size="medium" />
@@ -17,7 +13,7 @@
 		<n-gi>
 			<h1>Hello World component text</h1>
 		</n-gi>
-	 </n-grid>
+	</n-grid>
 </template>
 
 <script setup>
@@ -25,12 +21,11 @@ import { NButton, NSwitch, NGrid, NGi,  } from 'naive-ui';
 import { Money16Regular } from '@vicons/fluent';
 import { Icon } from '@vicons/utils';
 
-
 </script>
 
 <style scoped>
-.raaa > div {
+.example-class > div {
 	height: 100px;
-	background-color: rgba(111,2,2,.3);
+	background-color: rgba(80, 61, 61, 0.3);
 }
 </style>

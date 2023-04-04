@@ -46,7 +46,6 @@ const isLogingDataCorrect = computed(() => {
 const requestPincode = () => {
 	store.dispatch('WEBSOCKET_SEND_MESSAGE', { a: 'requestEmailPincode', email: inputEmail.value });
 
-	// disable send request button for 10 seconds
 	isRequestingPincode.value = true;
 	setTimeout(() => isRequestingPincode.value = false, 10000);
 };
